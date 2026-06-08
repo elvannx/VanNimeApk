@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>VanNime • Stream Anime Tanpa Batas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Red Gradient Background */
+        .bg-animate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 30% 10%, #1a0000 0%, #0a0000 50%, #000000 100%);
+        }
+        
+        .bg-animate::before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: radial-gradient(circle, rgba(255, 0, 50, 0.15) 0%, transparent 60%);
+            animation: rotateBg 25s linear infinite;
+        }
+        
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Glass Navigation */
+        .nav-glass {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 40, 80, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 20px;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ff1a4f, #cc0033);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 26, 79, 0.5);
+        }
+        
+        .logo-icon i {
+            font-size: 24px;
+            color: white;
+        }
+        
+        .logo-text h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #ff4d6d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo-text p {
+            font-size: 10px;
+            color: #ff4d6d;
+            letter-spacing: 2px;
+        }
+        
+        .search-wrapper {
+            flex: 1;
+            max-width: 450px;
+            position: relative;
+        }
+        
+        .search-wrapper i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff4d6d;
+        }
+        
+        .search-wrapper input {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            background: rgba(30, 30, 35, 0.8);
+            border: 1px solid rgba(255, 50, 90, 0.3);
+            border-radius: 50px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .search-wrapper input:focus {
+            border-color: #ff1a4f;
+            box-shadow: 0 0 15px rgba(255, 26, 79, 0.3);
+        }
+        
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 30, 70, 0.15);
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 50, 90, 0.3);
+        }
+        
+        .user-badge i {
+            color: #ff4d6d;
+            font-size: 20px;
+        }
+        
+        .user-badge span {
+            font-weight: 600;
+        }
+        
+        .user-badge small {
+            color: #ff4d6d;
+            font-size: 10px;
+        }
+        
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, rgba(255, 30, 70, 0.2), rgba(0,0,0,0.8));
+            border-radius: 28px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 50, 90, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,30,70,0.2), transparent);
+            border-radius: 50%;
+        }
+        
+        .hero h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        
+        .hero h2 span {
+            color: #ff1a4f;
+        }
+        
+        .hero p {
+            color: #aaa;
+            margin-bottom: 25px;
+            max-width: 500px;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat .number {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ff1a4f;
+        }
+        
+        .stat .label {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        /* Category Tabs */
+        .tabs-container {
+            margin-bottom: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255, 50, 90, 0.2);
+            padding-bottom: 15px;
+        }
+        
+        .tab {
+            background: transparent;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 40px;
+            color: #aaa;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: #ff1a4f;
+            color: white;
+            box-shadow: 0 5px 20px rgba(255, 26, 79, 0.4);
+        }
+        
+        /* Anime Grid */
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 25px;
+        }
+        
+        .anime-card {
+            background: rgba(20, 20, 25, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(255, 50, 90, 0.1);
+        }
+        
+        .anime-card:hover {
+            transform: translateY(-8px);
+            border-color: #ff1a4f;
+            box-shadow: 0 15px 35px rgba(255, 26, 79, 0.25);
+        }
+        
+        .card-image {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-image img {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .anime-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+        
+        .rating {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff1a4f;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .card-info {
+            padding: 12px;
+        }
+        
+        .card-info h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .card-info p {
+            font-size: 11px;
+            color: #ff4d6d;
+        }
+        
+        /* Modal Player */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.98);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            max-width: 1300px;
+            margin: 20px auto;
+            background: #0a0a0a;
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 26, 79, 0.3);
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            padding: 15px 20px;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,26,79,0.2);
+        }
+        
+        .modal-header h3 {
+            font-size: 18px;
+        }
+        
+        .close-modal {
+            background: #ff1a4f;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .close-modal:hover {
+            transform: scale(1.1);
+        }
+        
+        .video-wrapper {
+            flex: 1;
+            background: #000;
+            min-height: 0;
+        }
+        
+        .video-wrapper iframe, .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .modal-footer {
+            padding: 15px 20px;
+            background: rgba(0,0,0,0.8);
+            border-top: 1px solid rgba(255,26,79,0.2);
+        }
+        
+        .episode-scroll {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-height: 90px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        
+        .episode-btn {
+            background: rgba(255, 26, 79, 0.15);
+            border: 1px solid rgba(255,26,79,0.3);
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        
+        .episode-btn.active, .episode-btn:hover {
+            background: #ff1a4f;
+            border-color: #ff1a4f;
+        }
+        
+        .server-selector {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .server-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            color: #aaa;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        
+        .server-btn.active {
+            background: #ff1a4f;
+            color: white;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #ff1a4f;
+        }
+        
+        .error-msg {
+            text-align: center;
+            padding: 60px;
+            color: #aaa;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h2 { font-size: 28px; }
+            .anime-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
+            .nav-container { flex-direction: column; }
+            .search-wrapper { max-width: 100%; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-animate"></div>
+
+<nav class="nav-glass">
+    <div class="nav-container">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-tv"></i>
+            </div>
+            <div class="logo-text">
+                <h1>VanNime</h1>
+                <p>✦ PREMIUM STREAMING ✦</p>
+            </div>
+        </div>
+        
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Cari anime favoritmu...">
+        </div>
+        
+        <div class="user-badge">
+            <i class="fas fa-user"></i>
+            <div>
+                <span>Van Santiago</span><br>
+                <small>✦ t.me/Mwwwwwup ✦</small>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="main-container">
+    <div class="hero">
+        <h2>Streaming Anime <span>Tanpa Batas</span></h2>
+        <p>Kualitas HD • Subtitle Indonesia • Update Tercepat • Tanpa Iklan</p>
+        <div class="hero-stats">
+            <div class="stat"><div class="number" id="totalAnimeCount">0+</div><div class="label">Judul Anime</div></div>
+            <div class="stat"><div class="number">5000+</div><div class="label">Episode</div></div>
+            <div class="stat"><div class="number">24/7</div><div class="label">Server Aktif</div></div>
+        </div>
+    </div>
+    
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab active" data-cat="TRENDING">🔥 TRENDING</button>
+            <button class="tab" data-cat="POPULAR">⭐ POPULER</button>
+            <button class="tab" data-cat="RECENT">🆕 TERBARU</button>
+            <button class="tab" data-cat="MOVIE">🎬 MOVIE</button>
+        </div>
+    </div>
+    
+    <div id="animeGrid" class="anime-grid">
+        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat anime dari server...</div>
+    </div>
+</div>
+
+<!-- Modal Player -->
+<div id="playerModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">VanNime Player</h3>
+            <button class="close-modal" id="closeModal">✕</button>
+        </div>
+        <div id="videoWrapper" class="video-wrapper"></div>
+        <div class="modal-footer">
+            <div><i class="fas fa-list"></i> Daftar Episode</div>
+            <div id="episodeList" class="episode-scroll"></div>
+            <div class="server-selector" id="serverSelector">
+                <button class="server-btn active" data-server="gogo">Server Gogo</button>
+                <button class="server-btn" data-server="zoro">Server Zoro</button>
+                <button class="server-btn" data-server="embed">Server Embed</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==================== API CONFIGURATION ====================
+    // AniList API untuk data anime LENGKAP
+    const ANILIST_API = 'https://graphql.anilist.co';
+    // Consumet API untuk streaming
+    const CONSUMET_API = 'https://api.consumet.org/anime/gogoanime';
+    
+    let currentAnimeId = null;
+    let currentAnimeTitle = null;
+    let currentEpisodes = [];
+    let currentEpisodeNum = 1;
+    let currentServer = 'gogo';
+    let currentAnimeImage = null;
+    
+    // ==================== QUERY ANILIST ====================
+    async function fetchAnimeList(category) {
+        const grid = document.getElementById('animeGrid');
+        grid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat anime dari database...</div>';
+        
+        let sort = 'TRENDING_DESC';
+        let perPage = 24;
+        
+        if (category === 'POPULAR') sort = 'POPULARITY_DESC';
+        if (category === 'RECENT') sort = 'START_DATE_DESC';
+        if (category === 'MOVIE') sort = 'POPULARITY_DESC';
+        
+        const query = `
+            query ($page: Int, $perPage: Int, $sort: [MediaSort], $type: MediaType, $format: MediaFormat) {
+                Page(page: $page, perPage: $perPage) {
+                    pageInfo {
+                        total
+                    }
+                    media(sort: $sort, type: $type, format: $format) {
+                        id
+                        title {
+                            romaji
+                            english
+                            native
+                        }
+                        coverImage {
+                            large
+                            extraLarge
+                        }
+                        averageScore
+                        episodes
+                        format
+                        status
+                        genres
+                    }
+                }
+            }
+        `;
+        
+        const variables = {
+            page: 1,
+            perPage: perPage,
+            sort: sort,
+            type: "ANIME",
+            format: category === 'MOVIE' ? "MOVIE" : null
+        };
+        
+        try {
+            const response = await fetch(ANILIST_API, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ query, variables })
+            });
+            
+            const data = await response.json();
+            const animeList = data.data.Page.media;
+            
+            // Update total count
+            document.getElementById('totalAnimeCount').innerText = data.data.Page.pageInfo.total || '1000';
+            
+            renderAnimeGrid(animeList);
+        } catch (error) {
+            console.error('Error fetching from AniList:', error);
+            grid.innerHTML = '<div class="error-msg">❌ Gagal memuat data. Coba refresh halaman.</div>';
+        }
+    }
+    
+    // Render anime grid
+    function renderAnimeGrid(animes) {
+        const grid = document.getElementById('animeGrid');
+        
+        if (!animes || animes.length === 0) {
+            grid.innerHTML = '<div class="error-msg">😔 Tidak ada anime ditemukan</div>';
+            return;
+        }
+        
+        grid.innerHTML = animes.map(anime => {
+            const title = anime.title.romaji || anime.title.english || 'No Title';
+            const coverImage = anime.coverImage?.extraLarge || anime.coverImage?.large || 'https://placehold.co/300x450/1a1a2a/ff1a4f?text=No+Image';
+            const score = anime.averageScore ? (anime.averageScore / 10).toFixed(1) : '?';
+            const episodes = anime.episodes || '?';
+            
+            return `
+                <div class="anime-card" onclick="getAnimeDetail(${anime.id}, '${escapeHtml(title)}', '${coverImage}')">
+                    <div class="card-image">
+                        <img src="${coverImage}" alt="${title}" loading="lazy" onerror="this.src='https://placehold.co/300x450/1a1a2a/ff1a4f?text=VanNime'">
+                        <div class="rating">⭐ ${score}</div>
+                    </div>
+                    <div class="card-info">
+                        <h3>${escapeHtml(title)}</h3>
+                        <p>${episodes} Episode</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    // Search anime from AniList
+    async function searchAnime(query) {
+        if (!query.trim()) {
+            fetchAnimeList('TRENDING');
+            return;
+        }
+        
+        const grid = document.getElementById('animeGrid');
+        grid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-pulse"></i> Mencari anime...</div>';
+        
+        const searchQuery = `
+            query ($search: String) {
+                Page(page: 1, perPage: 30) {
+                    media(search: $search, type: ANIME) {
+                        id
+                        title {
+                            romaji
+                            english
+                        }
+                        coverImage {
+                            large
+                            extraLarge
+                        }
+                        averageScore
+                        episodes
+                    }
+                }
+            }
+        `;
+        
+        try {
+            const response = await fetch(ANILIST_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    query: searchQuery, 
+                    variables: { search: query } 
+                })
+            });
+            
+            const data = await response.json();
+            const results = data.data.Page.media;
+            
+            if (results.length === 0) {
+                grid.innerHTML = '<div class="error-msg">😔 Anime tidak ditemukan</div>';
+            } else {
+                renderAnimeGrid(results);
+            }
+        } catch (error) {
+            grid.innerHTML = '<div class="error-msg">❌ Gagal mencari anime</div>';
+        }
+    }
+    
+    // Get anime detail and episodes from Consumet
+    async function getAnimeDetail(anilistId, title, image) {
+        currentAnimeTitle = title;
+        currentAnimeImage = image;
+        
+        const modal = document.getElementById('playerModal');
+        const modalTitle = document.getElementById('modalTitle');
+        modalTitle.innerHTML = `<i class="fas fa-play-circle" style="color:#ff1a4f"></i> ${title}`;
+        modal.style.display = 'flex';
+        
+        document.getElementById('episodeList').innerHTML = '<div style="padding:10px;"><i class="fas fa-spinner fa-pulse"></i> Memuat episode...</div>';
+        
+        // Cari anime di consumet berdasarkan judul
+        try {
+            const searchRes = await fetch(`${CONSUMET_API}/${encodeURIComponent(title)}`);
+            const searchData = await searchRes.json();
+            
+            if (searchData.results && searchData.results.length > 0) {
+                const animeId = searchData.results[0].id;
+                currentAnimeId = animeId;
+                
+                // Ambil detail episode
+                const infoRes = await fetch(`${CONSUMET_API}/info/${animeId}`);
+                const infoData = await infoRes.json();
+                currentEpisodes = infoData.episodes || [];
+                
+                if (currentEpisodes.length > 0) {
+                    renderEpisodeList();
+                    loadEpisode(1);
+                } else {
+                    document.getElementById('episodeList').innerHTML = '<div style="padding:10px;">Tidak ada episode tersedia</div>';
+                    loadFallbackVideo(1);
+                }
+            } else {
+                document.getElementById('episodeList').innerHTML = '<div style="padding:10px;">Episode tidak tersedia</div>';
+                loadFallbackVideo(1);
+            }
+        } catch (error) {
+            console.error('Error getting episodes:', error);
+            document.getElementById('episodeList').innerHTML = '<div style="padding:10px;">Gagal memuat episode</div>';
+            loadFallbackVideo(1);
+        }
+    }
+    
+    function renderEpisodeList() {
+        const container = document.getElementById('episodeList');
+        const totalEp = Math.min(currentEpisodes.length, 100);
+        
+        let html = '';
+        for (let i = 1; i <= totalEp; i++) {
+            html += `<button class="episode-btn" onclick="loadEpisode(${i})">${i}</button>`;
+        }
+        container.innerHTML = html || '<div style="padding:10px;">Tidak ada episode</div>';
+    }
+    
+    async function loadEpisode(epNum) {
+        currentEpisodeNum = epNum;
+        
+        // Update active button
+        document.querySelectorAll('.episode-btn').forEach((btn, idx) => {
+            if (idx + 1 === epNum) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        
+        const wrapper = document.getElementById('videoWrapper');
+        wrapper.innerHTML = '<div class="loading" style="height:100%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-spinner fa-pulse"></i> Memuat episode...</div>';
+        
+        try {
+            let videoUrl = null;
+            
+            if (currentEpisodes.length > 0 && currentEpisodes[epNum - 1]) {
+                const episodeId = currentEpisodes[epNum - 1].id;
+                const streamRes = await fetch(`${CONSUMET_API}/watch/${episodeId}`);
+                const streamData = await streamRes.json();
+                
+                if (streamData.sources && streamData.sources.length > 0) {
+                    let source = streamData.sources.find(s => s.quality === '1080p') ||
+                                streamData.sources.find(s => s.quality === '720p') ||
+                                streamData.sources[0];
+                    videoUrl = source.url;
+                }
+            }
+            
+            if (videoUrl) {
+                if (videoUrl.includes('.m3u8')) {
+                    wrapper.innerHTML = `<iframe src="https://vidsrc.pro/embed?url=${encodeURIComponent(videoUrl)}" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>`;
+                } else {
+                    wrapper.innerHTML = `<video controls autoplay style="width:100%;height:100%;"><source src="${videoUrl}" type="video/mp4"></video>`;
+                }
+            } else {
+                loadFallbackVideo(epNum);
+            }
+        } catch (error) {
+            console.error('Stream error:', error);
+            loadFallbackVideo(epNum);
+        }
+    }
+    
+    function loadFallbackVideo(epNum) {
+        const wrapper = document.getElementById('videoWrapper');
+        let embedUrl = '';
+        
+        if (currentServer === 'gogo') {
+            embedUrl = `https://vidsrc.pro/embed/anime/${encodeURIComponent(currentAnimeTitle)}/${epNum}`;
+        } else if (currentServer === 'zoro') {
+            embedUrl = `https://vidsrc.xyz/embed/anime/${encodeURIComponent(currentAnimeTitle)}/${epNum}`;
+        } else {
+            embedUrl = `https://embed.su/embed/anime/${encodeURIComponent(currentAnimeTitle)}/${epNum}`;
+        }
+        
+        wrapper.innerHTML = `<iframe src="${embedUrl}" allowfullscreen style="width:100%;height:100%;border:none;" allow="autoplay"></iframe>`;
+    }
+    
+    function changeServer(server) {
+        currentServer = server;
+        document.querySelectorAll('.server-btn').forEach(btn => {
+            if (btn.getAttribute('data-server') === server) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        
+        if (currentEpisodeNum) {
+            loadFallbackVideo(currentEpisodeNum);
+        }
+    }
+    
+    function escapeHtml(text) {
+        let div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    // Event Listeners
+    document.getElementById('closeModal').onclick = () => {
+        document.getElementById('playerModal').style.display = 'none';
+        document.getElementById('videoWrapper').innerHTML = '';
+    };
+    
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.onclick = () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            fetchAnimeList(tab.getAttribute('data-cat'));
+        };
+    });
+    
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') searchAnime(e.target.value);
+    });
+    
+    document.querySelectorAll('.server-btn').forEach(btn => {
+        btn.onclick = () => changeServer(btn.getAttribute('data-server'));
+    });
+    
+    // Global functions
+    window.getAnimeDetail = getAnimeDetail;
+    window.loadEpisode = loadEpisode;
+    window.changeServer = changeServer;
+    
+    // Initial load
+    fetchAnimeList('TRENDING');
+</script>
+</body>
+</html>
